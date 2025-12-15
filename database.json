@@ -9,35 +9,184 @@
     },
     {
       "id": 2,
-      "username": "sakin",
+      "username": "sakin1",
       "password": "1234",
       "role": "resident",
-      "displayName": "Sakin (Demo)"
+      "displayName": "Ahmet Yılmaz"
+    },
+    {
+      "id": 3,
+      "username": "sakin2",
+      "password": "1234",
+      "role": "resident",
+      "displayName": "Elif Kaya"
+    },
+    {
+      "id": 4,
+      "username": "sakin3",
+      "password": "1234",
+      "role": "resident",
+      "displayName": "Mehmet Demir"
+    },
+    {
+      "id": 5,
+      "username": "sakin4",
+      "password": "1234",
+      "role": "resident",
+      "displayName": "Zeynep Çelik"
+    },
+    {
+      "id": 6,
+      "username": "sakin5",
+      "password": "1234",
+      "role": "resident",
+      "displayName": "Canan Aydın"
     }
   ],
   "aidatlar": [
     {
-      "id": "A-2025-11-01",
-      "aciklama": "Kasım 2025 Aidatı",
+      "id": "A-2025-10-S2",
+      "aciklama": "Ekim 2025 Aidatı",
       "tutar": 850,
+      "sonTarih": "2025-10-31",
+      "donem": "2025-10",
+      "sakinId": 2,
+      "durum": "paid"
+    },
+    {
+      "id": "A-2025-11-S2",
+      "aciklama": "Kasım 2025 Aidatı",
+      "tutar": 900,
       "sonTarih": "2025-11-30",
       "donem": "2025-11",
       "sakinId": 2,
       "durum": "unpaid"
     },
     {
-      "id": "A-2025-12-01",
+      "id": "A-2025-12-S2",
       "aciklama": "Aralık 2025 Aidatı",
-      "tutar": 900,
+      "tutar": 950,
       "sonTarih": "2025-12-31",
       "donem": "2025-12",
       "sakinId": 2,
+      "durum": "unpaid"
+    },
+
+    {
+      "id": "A-2025-10-S3",
+      "aciklama": "Ekim 2025 Aidatı",
+      "tutar": 850,
+      "sonTarih": "2025-10-31",
+      "donem": "2025-10",
+      "sakinId": 3,
+      "durum": "paid"
+    },
+    {
+      "id": "A-2025-11-S3",
+      "aciklama": "Kasım 2025 Aidatı",
+      "tutar": 900,
+      "sonTarih": "2025-11-30",
+      "donem": "2025-11",
+      "sakinId": 3,
+      "durum": "paid"
+    },
+    {
+      "id": "A-2025-12-S3",
+      "aciklama": "Aralık 2025 Aidatı",
+      "tutar": 950,
+      "sonTarih": "2025-12-31",
+      "donem": "2025-12",
+      "sakinId": 3,
+      "durum": "unpaid"
+    },
+
+    {
+      "id": "A-2025-10-S4",
+      "aciklama": "Ekim 2025 Aidatı",
+      "tutar": 850,
+      "sonTarih": "2025-10-31",
+      "donem": "2025-10",
+      "sakinId": 4,
+      "durum": "unpaid"
+    },
+    {
+      "id": "A-2025-11-S4",
+      "aciklama": "Kasım 2025 Aidatı",
+      "tutar": 900,
+      "sonTarih": "2025-11-30",
+      "donem": "2025-11",
+      "sakinId": 4,
+      "durum": "paid"
+    },
+    {
+      "id": "A-2025-12-S4",
+      "aciklama": "Aralık 2025 Aidatı",
+      "tutar": 950,
+      "sonTarih": "2025-12-31",
+      "donem": "2025-12",
+      "sakinId": 4,
+      "durum": "unpaid"
+    },
+
+    {
+      "id": "A-2025-10-S5",
+      "aciklama": "Ekim 2025 Aidatı",
+      "tutar": 850,
+      "sonTarih": "2025-10-31",
+      "donem": "2025-10",
+      "sakinId": 5,
+      "durum": "paid"
+    },
+    {
+      "id": "A-2025-11-S5",
+      "aciklama": "Kasım 2025 Aidatı",
+      "tutar": 900,
+      "sonTarih": "2025-11-30",
+      "donem": "2025-11",
+      "sakinId": 5,
+      "durum": "unpaid"
+    },
+    {
+      "id": "A-2025-12-S5",
+      "aciklama": "Aralık 2025 Aidatı",
+      "tutar": 950,
+      "sonTarih": "2025-12-31",
+      "donem": "2025-12",
+      "sakinId": 5,
+      "durum": "paid"
+    },
+
+    {
+      "id": "A-2025-10-S6",
+      "aciklama": "Ekim 2025 Aidatı",
+      "tutar": 850,
+      "sonTarih": "2025-10-31",
+      "donem": "2025-10",
+      "sakinId": 6,
+      "durum": "paid"
+    },
+    {
+      "id": "A-2025-11-S6",
+      "aciklama": "Kasım 2025 Aidatı",
+      "tutar": 900,
+      "sonTarih": "2025-11-30",
+      "donem": "2025-11",
+      "sakinId": 6,
+      "durum": "paid"
+    },
+    {
+      "id": "A-2025-12-S6",
+      "aciklama": "Aralık 2025 Aidatı",
+      "tutar": 950,
+      "sonTarih": "2025-12-31",
+      "donem": "2025-12",
+      "sakinId": 6,
       "durum": "unpaid"
     }
   ],
   "faturalar": [
     {
-      "id": "F-2025-11-ELEK",
+      "id": "F-2025-11-ELEK-S2",
       "aciklama": "Elektrik Faturası (Kasım)",
       "tutar": 320,
       "sonTarih": "2025-11-25",
@@ -46,13 +195,134 @@
       "durum": "paid"
     },
     {
-      "id": "F-2025-12-SU",
-      "aciklama": "Su Faturası (Aralık)",
+      "id": "F-2025-11-SU-S2",
+      "aciklama": "Su Faturası (Kasım)",
       "tutar": 145,
-      "sonTarih": "2025-12-20",
+      "sonTarih": "2025-11-22",
+      "donem": "2025-11",
+      "sakinId": 2,
+      "durum": "unpaid"
+    },
+    {
+      "id": "F-2025-12-DOGALGAZ-S2",
+      "aciklama": "Doğalgaz Faturası (Aralık)",
+      "tutar": 610,
+      "sonTarih": "2025-12-28",
       "donem": "2025-12",
       "sakinId": 2,
       "durum": "unpaid"
+    },
+
+    {
+      "id": "F-2025-11-ELEK-S3",
+      "aciklama": "Elektrik Faturası (Kasım)",
+      "tutar": 290,
+      "sonTarih": "2025-11-25",
+      "donem": "2025-11",
+      "sakinId": 3,
+      "durum": "paid"
+    },
+    {
+      "id": "F-2025-11-INTERNET-S3",
+      "aciklama": "İnternet Faturası (Kasım)",
+      "tutar": 240,
+      "sonTarih": "2025-11-18",
+      "donem": "2025-11",
+      "sakinId": 3,
+      "durum": "paid"
+    },
+    {
+      "id": "F-2025-12-SU-S3",
+      "aciklama": "Su Faturası (Aralık)",
+      "tutar": 160,
+      "sonTarih": "2025-12-22",
+      "donem": "2025-12",
+      "sakinId": 3,
+      "durum": "unpaid"
+    },
+
+    {
+      "id": "F-2025-10-ELEK-S4",
+      "aciklama": "Elektrik Faturası (Ekim)",
+      "tutar": 410,
+      "sonTarih": "2025-10-25",
+      "donem": "2025-10",
+      "sakinId": 4,
+      "durum": "unpaid"
+    },
+    {
+      "id": "F-2025-11-SU-S4",
+      "aciklama": "Su Faturası (Kasım)",
+      "tutar": 130,
+      "sonTarih": "2025-11-22",
+      "donem": "2025-11",
+      "sakinId": 4,
+      "durum": "paid"
+    },
+    {
+      "id": "F-2025-12-INTERNET-S4",
+      "aciklama": "İnternet Faturası (Aralık)",
+      "tutar": 260,
+      "sonTarih": "2025-12-18",
+      "donem": "2025-12",
+      "sakinId": 4,
+      "durum": "unpaid"
+    },
+
+    {
+      "id": "F-2025-11-ELEK-S5",
+      "aciklama": "Elektrik Faturası (Kasım)",
+      "tutar": 305,
+      "sonTarih": "2025-11-25",
+      "donem": "2025-11",
+      "sakinId": 5,
+      "durum": "paid"
+    },
+    {
+      "id": "F-2025-12-DOGALGAZ-S5",
+      "aciklama": "Doğalgaz Faturası (Aralık)",
+      "tutar": 720,
+      "sonTarih": "2025-12-28",
+      "donem": "2025-12",
+      "sakinId": 5,
+      "durum": "paid"
+    },
+    {
+      "id": "F-2025-12-SU-S5",
+      "aciklama": "Su Faturası (Aralık)",
+      "tutar": 170,
+      "sonTarih": "2025-12-22",
+      "donem": "2025-12",
+      "sakinId": 5,
+      "durum": "unpaid"
+    },
+
+    {
+      "id": "F-2025-11-INTERNET-S6",
+      "aciklama": "İnternet Faturası (Kasım)",
+      "tutar": 220,
+      "sonTarih": "2025-11-18",
+      "donem": "2025-11",
+      "sakinId": 6,
+      "durum": "paid"
+    },
+    {
+      "id": "F-2025-12-ELEK-S6",
+      "aciklama": "Elektrik Faturası (Aralık)",
+      "tutar": 330,
+      "sonTarih": "2025-12-25",
+      "donem": "2025-12",
+      "sakinId": 6,
+      "durum": "unpaid"
+    },
+    {
+      "id": "F-2025-12-SU-S6",
+      "aciklama": "Su Faturası (Aralık)",
+      "tutar": 155,
+      "sonTarih": "2025-12-22",
+      "donem": "2025-12",
+      "sakinId": 6,
+      "durum": "paid"
     }
   ],
   "duyurular": [
@@ -65,8 +335,32 @@
     {
       "id": 2,
       "baslik": "Asansör bakımı",
-      "icerik": "Periyodik bakım 16 Aralık Salı 10:00-12:00 arası yapılacaktır.",
+      "icerik": "Periyodik bakım 16 Aralık Salı 10:00-12:00 arası yapılacaktır.\nBu saatlerde asansör kısa süreli devre dışı kalabilir.",
       "tarih": "2025-12-16"
+    },
+    {
+      "id": 3,
+      "baslik": "Aidat son ödeme hatırlatması",
+      "icerik": "Kasım aidatları için son ödeme tarihi 30.11.2025'tir.\nGecikme durumunda yönetim ile iletişime geçiniz.",
+      "tarih": "2025-11-26"
+    },
+    {
+      "id": 4,
+      "baslik": "Çöp toplama bilgilendirmesi",
+      "icerik": "Çöp atım saatleri 20:00-22:00 arasıdır.\nLütfen kapı önü yerine çöp alanını kullanınız.",
+      "tarih": "2025-12-05"
+    },
+    {
+      "id": 5,
+      "baslik": "Su kesintisi (planlı)",
+      "icerik": "19 Aralık Cuma 09:30-13:00 arasında planlı su kesintisi olacaktır.\nDepo doluluğunu kontrol edebilirsiniz.",
+      "tarih": "2025-12-17"
+    },
+    {
+      "id": 6,
+      "baslik": "Yılbaşı güvenlik bilgilendirmesi",
+      "icerik": "Yılbaşı gecesi güvenlik devriyesi artırılacaktır.\nOrtak alanlarda gürültü konusunda hassasiyet rica ederiz.",
+      "tarih": "2025-12-28"
     }
   ]
 }

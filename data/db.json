@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "createdAt": "2025-12-15T20:51:15.660090",
+    "nextIds": {
+      "users": 4,
+      "apartments": 4,
+      "dues": 3,
+      "payments": 2,
+      "expenses": 3,
+      "announcements": 2
+    }
+  },
+  "users": [
+    {
+      "id": 1,
+      "name": "Site Yöneticisi",
+      "phone": "05550000000",
+      "role": "admin",
+      "password": "admin123"
+    },
+    {
+      "id": 2,
+      "name": "Ayşe Yılmaz",
+      "phone": "05551112233",
+      "role": "resident",
+      "password": "123456"
+    },
+    {
+      "id": 3,
+      "name": "Mehmet Demir",
+      "phone": "05554445566",
+      "role": "resident",
+      "password": "123456"
+    }
+  ],
+  "apartments": [
+    {
+      "id": 1,
+      "number": 1,
+      "userId": 2,
+      "status": 1
+    },
+    {
+      "id": 2,
+      "number": 2,
+      "userId": 3,
+      "status": 1
+    },
+    {
+      "id": 3,
+      "number": 3,
+      "userId": null,
+      "status": 0
+    }
+  ],
+  "dues": [
+    {
+      "id": 1,
+      "apartmentId": 1,
+      "period": "2025-12",
+      "amount": 500.0,
+      "paid": 0,
+      "description": "Aralık 2025 Aidatı"
+    },
+    {
+      "id": 2,
+      "apartmentId": 2,
+      "period": "2025-12",
+      "amount": 500.0,
+      "paid": 1,
+      "description": "Aralık 2025 Aidatı"
+    }
+  ],
+  "payments": [
+    {
+      "id": 1,
+      "dueId": 2,
+      "userId": 3,
+      "datetime": "2025-12-05T14:20:00",
+      "cardMasked": "**** **** **** 4242",
+      "amount": 500.0
+    }
+  ],
+  "expenses": [
+    {
+      "id": 1,
+      "title": "Asansör Bakımı",
+      "amount": 1200,
+      "date": "2025-12-02",
+      "description": "Aylık bakım ve kontrol."
+    },
+    {
+      "id": 2,
+      "title": "Ortak Alan Elektrik",
+      "amount": 650,
+      "date": "2025-12-03",
+      "description": "Merdiven ve bahçe aydınlatması."
+    }
+  ],
+  "announcements": [
+    {
+      "id": 1,
+      "title": "Su Kesintisi",
+      "body": "15 Aralık 2025 Pazartesi 10:00-14:00 arası su kesintisi olacaktır.",
+      "date": "2025-12-14"
+    }
+  ]
+}

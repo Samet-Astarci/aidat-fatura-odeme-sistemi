@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Duyurular • Site Aidat Takip</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="nav"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="hd"><h2>Duyuru Ekleme Paneli 📣</h2></div>
+        <div class="bd">
+          
+<div class="two-col">
+  <div>
+    <h3 style="margin-top:0;">Duyuru Ekle 📣</h3>
+    <div class="row">
+      <div><label>Başlık</label><input id="title" placeholder="Su kesintisi" /></div>
+      <div><label>Tarih</label><input id="date" type="date" /></div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <div><label>İçerik</label><textarea id="body" placeholder="Duyuru metni..."></textarea></div>
+    </div>
+    <div class="row" style="margin-top:12px;">
+      <button id="btnAdd">Yayınla</button>
+    </div>
+  </div>
+
+  <div>
+    <h3 style="margin-top:0;">Duyurular 🗞️</h3>
+    <table class="table" id="tbl">
+      <thead><tr><th>Tarih</th><th>Başlık</th><th>İçerik</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<script type="module">
+import { requireAuth, api, qs } from "/assets/common.js";
+import { mountNav, toast } from "/assets/ui.js";
+requireAuth("admin");
+mountNav();
+
+async function refresh(){
+  const data = await api("/api/announcements");
+  const tb = qs("#tbl tbody");
+  tb.innerHTML = data.announcements.map(a=>`
+    <tr>
+      <td>${a.date}</td>
+      <td><b>${a.title}</b></td>
+      <td style="color:var(--muted);">${a.body}</td>
+    </tr>
+  `).join("");
+}
+
+qs("#btnAdd").addEventListener("click", async ()=>{
+  try{
+    await api("/api/announcements", {
+      method:"POST",
+      body: JSON.stringify({
+        title: qs("#title").value.trim(),
+        body: qs("#body").value.trim(),
+        date: qs("#date").value
+      })
+    });
+    toast("Duyuru yayınlandı ✅");
+    qs("#title").value=""; qs("#body").value="";
+    refresh();
+  }catch(e){
+    toast("Yayınlanamadı ❌", e.message);
+  }
+});
+
+refresh();
+</script>
+</body>
+</html>

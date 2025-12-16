@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ödeme Yap • Site Aidat Takip</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="nav"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="hd"><h2>Aidat Ödeme Paneli 💳</h2></div>
+        <div class="bd">
+          
+<div class="two-col">
+  <div>
+    <h3 style="margin-top:0;">Ödeme Yap 💳</h3>
+    <div class="row">
+      <div>
+        <label>Ödenecek Borç</label>
+        <select id="dueId"></select>
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <div><label>Tutar</label><input id="amount" type="number" step="0.01" /></div>
+      <div><label>Kart No (16 hane)</label><input id="card" placeholder="4242 4242 4242 4242" /></div>
+    </div>
+    <div class="row" style="margin-top:12px;">
+      <button id="btnPay" class="btn-ok">Banka Doğrulaması ile Öde ✅</button>
+      <button id="btnFill" class="btn-ghost">Test Kartı Doldur</button>
+    </div>
+
+    <div class="footer-note">
+      Banka doğrulaması: Kart numarası Luhn kontrolünden geçerse onaylanır. (Hata durumunu görmen için) 🙂
+    </div>
+  </div>
+
+  <div>
+    <h3 style="margin-top:0;">Makbuz 🧾</h3>
+    <div id="receipt" style="border:1px solid var(--border); border-radius:12px; padding:12px; background:rgba(0,0,0,.18); color:var(--muted);">
+      Henüz ödeme yapılmadı.
+    </div>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<script type="module">
+import { requireAuth, api, fmtTL, qs } from "/assets/common.js";
+import { mountNav, toast } from "/assets/ui.js";
+requireAuth("resident");
+mountNav();
+
+async function loadDues(){
+  const data = await api("/api/dues");
+  const unpaid = data.dues.filter(d=>!d.paid);
+  const sel = qs("#dueId");
+  if (!unpaid.length){
+    sel.innerHTML = `<option value="">(Ödenmemiş borç yok 🟩)</option>`;
+    qs("#amount").value = "";
+    return;
+  }
+  sel.innerHTML = unpaid
+    .sort((a,b)=>b.period.localeCompare(a.period))
+    .map(d=>`<option value="${d.id}" data-amount="${d.amount}">${d.period} • ${fmtTL(d.amount)}</option>`).join("");
+  // prefill amount
+  const opt = sel.options[0];
+  qs("#amount").value = opt.getAttribute("data-amount");
+}
+
+qs("#dueId").addEventListener("change", ()=>{
+  const opt = qs("#dueId").selectedOptions[0];
+  const a = opt ? opt.getAttribute("data-amount") : "";
+  qs("#amount").value = a || "";
+});
+
+qs("#btnFill").addEventListener("click", ()=>{
+  // 4242... passes Luhn
+  qs("#card").value = "4242 4242 4242 4242";
+});
+
+qs("#btnPay").addEventListener("click", async ()=>{
+  try{
+    const dueId = Number(qs("#dueId").value);
+    if (!dueId) throw new Error("Ödenecek borç seçilmedi.");
+    const amount = Number(qs("#amount").value);
+    const cardNumber = qs("#card").value.trim();
+
+    const r = await api("/api/payments/pay", {
+      method:"POST",
+      body: JSON.stringify({ dueId, amount, cardNumber })
+    });
+
+    const rc = r.receipt;
+    qs("#receipt").innerHTML = `
+      <div><b style="color:var(--text)">Ödeme Başarılı ✅</b></div>
+      <div style="margin-top:6px;">Makbuz No: <b>${rc.paymentId}</b></div>
+      <div>Daire: <b>${rc.apartmentNumber}</b></div>
+      <div>Dönem: <b>${rc.period}</b></div>
+      <div>Tutar: <b>${fmtTL(rc.amount)}</b></div>
+      <div>Tarih: <b>${new Date(rc.datetime).toLocaleString("tr-TR")}</b></div>
+      <div>Kart: <b>${rc.cardMasked}</b></div>
+    `;
+    toast("Ödeme alındı ✅");
+    await loadDues();
+  }catch(e){
+    toast("Ödeme başarısız ❌", e.message);
+  }
+});
+
+loadDues();
+</script>
+</body>
+</html>

@@ -1,56 +1,32 @@
-# Aidat / Fatura Ödeme Sistemi — Basit HTML/CSS/JS Prototip 🧩
+# Site Aidat Takip - Prototip (HTML/CSS/JS + JSON)
 
-Bu repo, dersin **Prototip Geliştirme** kısmı için hazırlanmış **vanilla (frameworksüz)** bir prototiptir.
+Bu prototip, rapordaki temel senaryoları çalıştırır:
+- Login (Yönetici / Sakin)
+- Yönetici: Daire & kullanıcı ekleme/atama, toplu aidat tanımlama, gider ekleme, duyuru ekleme, finansal rapor
+- Sakin: Bakiye görüntüleme, borç listesi (kırmızı/yeşil), ödeme yapma (banka doğrulama simülasyonu), gider/duyuru görüntüleme
 
-✅ Özellikler
-- Ekran tasarımları + sayfa geçişleri (hash router)
-- En az 3 aktif fonksiyon:
-  - 🔐 Giriş
-  - 📋 Aidat/Fatura listeleme
-  - 🔎 Detay + 💳 ödeme simülasyonu
-- Boş/Hata durumları:
-  - 🫥 Boş listeler (Test Modu)
-  - ⛔ Ödeme başarısız simülasyonu (Test Modu)
-  - ⚠️ Veri yükleme hatası / local fallback (Test Modu)
-
----
-
-## Çalıştırma 🚀
-
-> **Önemli:** `fetch()` kullandığı için **dosyaya çift tıklayıp** açmak yerine bir **local server** ile açman önerilir.
-
-### 1) VS Code Live Server (en kolay)
-- `index.html` → **Open with Live Server**
-
-### 2) Python HTTP server
+## Kurulum / Çalıştırma
+1) Node.js kurulu olmalı.
+2) Proje klasöründe:
 ```bash
-python -m http.server 5500
-# sonra tarayıcıda:
-# http://localhost:5500
+npm install
+npm start
 ```
+3) Tarayıcıda aç:
+- http://localhost:3000
 
----
+## Demo hesaplar
+- Yönetici:
+  - Telefon: 05550000000
+  - Şifre: admin123
+- Sakin (Daire 1):
+  - Telefon: 05551112233
+  - Şifre: 123456
+- Sakin (Daire 2):
+  - Telefon: 05554445566
+  - Şifre: 123456
 
-## Veri Kaynağı 🌐
-
-Uygulama önce şu adresten okur (read-only):
-
-- `https://raw.githubusercontent.com/Samet-Astarci/aidat-fatura-odeme-sistemi/main/database.json`
-
-Eğer erişemezse otomatik **local fallback** kullanır:
-- `./database.sample.json`
-
-> Not: Prototip “yazma” yapmaz. Ödemeler cihazda `localStorage` ile tutulur.
-
----
-
-## Demo Kullanıcıları 👥
-- `admin / 1234`
-- `sakin / 1234`
-
-Eğer JSON içinde kullanıcı yoksa bu demo kullanıcılar otomatik oluşturulur.
-
----
-
-## GitHub Pages (opsiyonel) 🌍
-Repo’yu GitHub Pages’e koyarsan, link üzerinden demo yapabilirsin.
+## Notlar
+- Veriler `data/db.json` dosyasında tutulur.
+- Sunucu JSON dosyasını okuyup yazar (gerçek DB yerine).
+- Yedek: Yönetici panelinden "Yedek Al" ile `backups/` klasörüne kopya oluşturulur.

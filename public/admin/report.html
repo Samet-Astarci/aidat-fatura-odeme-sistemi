@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rapor • Site Aidat Takip</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="nav"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="hd"><h2>Finansal Rapor Görüntüle 📊</h2></div>
+        <div class="bd">
+          
+<div class="kpi" id="kpi"></div>
+
+<div class="card" style="margin-top:16px;">
+  <div class="hd">
+    <h2 style="margin:0;">Aylık Özet Grafiği 📊</h2>
+    <div class="row" style="gap:8px; align-items:center; margin:0;">
+      <button id="btnBackup" class="btn-ghost">Yedek Al</button>
+    </div>
+  </div>
+  <div class="bd">
+    <canvas id="chart" width="1000" height="360" style="width:100%; height:360px; border:1px solid var(--border); border-radius:12px;"></canvas>
+    <div class="footer-note">Grafik: her dönem için “yazılan aidat” ve “toplanan aidat” barları.</div>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<script type="module">
+import { requireAuth, api, fmtTL, qs } from "/assets/common.js";
+import { mountNav, toast } from "/assets/ui.js";
+requireAuth("admin");
+mountNav();
+
+function drawBars(canvas, rows){
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // layout
+  const pad = 40;
+  const W = canvas.width, H = canvas.height;
+  const innerW = W - pad*2, innerH = H - pad*2;
+
+  const maxV = Math.max(1, ...rows.flatMap(r=>[r.dues, r.paid]));
+  const barGroupW = innerW / Math.max(1, rows.length);
+  const barW = Math.max(8, barGroupW * 0.28);
+  const gap = barGroupW * 0.12;
+
+  // axes
+  ctx.globalAlpha = 0.35;
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(pad, pad, 1, innerH);
+  ctx.fillRect(pad, pad+innerH, innerW, 1);
+  ctx.globalAlpha = 1;
+
+  // labels + bars
+  ctx.font = "12px ui-sans-serif, system-ui";
+  ctx.fillStyle = "#e9eeff";
+
+  rows.forEach((r, i)=>{
+    const x0 = pad + i*barGroupW + barGroupW*0.22;
+    const yBase = pad + innerH;
+
+    const h1 = (r.dues / maxV) * innerH;
+    const h2 = (r.paid / maxV) * innerH;
+
+    // dues bar (left)
+    ctx.globalAlpha = 0.55;
+    ctx.fillRect(x0, yBase - h1, barW, h1);
+    // paid bar (right)
+    ctx.globalAlpha = 0.95;
+    ctx.fillRect(x0 + barW + gap, yBase - h2, barW, h2);
+
+    ctx.globalAlpha = 1;
+    ctx.fillText(r.period, x0 - 8, yBase + 18);
+  });
+
+  // legend
+  ctx.globalAlpha = 0.55;
+  ctx.fillRect(pad, 12, 14, 10);
+  ctx.globalAlpha = 0.95;
+  ctx.fillRect(pad+80, 12, 14, 10);
+  ctx.globalAlpha = 1;
+  ctx.fillText("Yazılan Aidat", pad+18, 21);
+  ctx.fillText("Toplanan Aidat", pad+98, 21);
+}
+
+async function load(){
+  try{
+    const s = await api("/api/reports/summary");
+    const el = qs("#kpi");
+    el.innerHTML = `
+      <div class="box"><div class="t">Toplam Aidat</div><div class="v">${fmtTL(s.totalDues)}</div></div>
+      <div class="box"><div class="t">Toplanan</div><div class="v">${fmtTL(s.totalPaid)}</div></div>
+      <div class="box"><div class="t">Ödenmemiş</div><div class="v">${fmtTL(s.totalUnpaid)}</div></div>
+      <div class="box"><div class="t">Net (Toplanan - Gider)</div><div class="v">${fmtTL(s.net)}</div></div>
+    `;
+
+    const m = await api("/api/reports/monthly");
+    const canvas = qs("#chart");
+    drawBars(canvas, m.monthly);
+  }catch(e){
+    toast("Rapor alınamadı ❌", e.message);
+  }
+}
+
+qs("#btnBackup").addEventListener("click", async ()=>{
+  try{
+    const r = await api("/api/backup/run", { method:"POST" });
+    toast("Yedek alındı ✅", r.file);
+  }catch(e){
+    toast("Yedek alınamadı ❌", e.message);
+  }
+});
+
+load();
+</script>
+</body>
+</html>

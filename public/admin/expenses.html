@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Giderler • Site Aidat Takip</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="nav"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="hd"><h2>Gider Ekleme Paneli 🧾</h2></div>
+        <div class="bd">
+          
+<div class="two-col">
+  <div>
+    <h3 style="margin-top:0;">Gider Ekle ➕</h3>
+    <div class="row">
+      <div><label>Başlık</label><input id="title" placeholder="Asansör Bakımı" /></div>
+      <div><label>Tutar (TL)</label><input id="amount" type="number" step="0.01" /></div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <div><label>Tarih</label><input id="date" type="date" /></div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <div><label>Açıklama</label><textarea id="description" placeholder="Detay..."></textarea></div>
+    </div>
+    <div class="row" style="margin-top:12px;">
+      <button id="btnAdd">Kaydet</button>
+    </div>
+    <div class="footer-note">Sakinler bu giderleri görebilir (şeffaflık) 👀</div>
+  </div>
+
+  <div>
+    <h3 style="margin-top:0;">Giderler 🧾</h3>
+    <table class="table" id="tbl">
+      <thead><tr><th>Tarih</th><th>Başlık</th><th>Tutar</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<script type="module">
+import { requireAuth, api, qs, fmtTL } from "/assets/common.js";
+import { mountNav, toast } from "/assets/ui.js";
+requireAuth("admin");
+mountNav();
+
+async function refresh(){
+  const data = await api("/api/expenses");
+  const tb = qs("#tbl tbody");
+  tb.innerHTML = data.expenses
+    .sort((a,b)=>String(b.date).localeCompare(String(a.date)))
+    .map(e=>`<tr><td>${e.date}</td><td>${e.title}</td><td>${fmtTL(e.amount)}</td></tr>`).join("");
+}
+
+qs("#btnAdd").addEventListener("click", async ()=>{
+  try{
+    await api("/api/expenses", {
+      method:"POST",
+      body: JSON.stringify({
+        title: qs("#title").value.trim(),
+        amount: Number(qs("#amount").value),
+        date: qs("#date").value,
+        description: qs("#description").value.trim()
+      })
+    });
+    toast("Gider eklendi ✅");
+    qs("#title").value=""; qs("#amount").value=""; qs("#description").value="";
+    refresh();
+  }catch(e){
+    toast("Eklenemedi ❌", e.message);
+  }
+});
+
+refresh();
+</script>
+</body>
+</html>

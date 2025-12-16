@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yönetici Paneli • Site Aidat Takip</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="nav"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="hd"><h2>Yönetici Paneli 🧑‍💼</h2></div>
+        <div class="bd">
+          
+<div class="kpi" id="kpi"></div>
+<div class="footer-note">Hızlı menü: üst bardan sayfalara geçebilirsin 🙂</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<script type="module">
+import { requireAuth, api, fmtTL } from "/assets/common.js";
+import { mountNav, toast } from "/assets/ui.js";
+requireAuth("admin");
+mountNav();
+
+async function load(){
+  try{
+    const s = await api("/api/reports/summary");
+    const el = document.querySelector("#kpi");
+    el.innerHTML = `
+      <div class="box"><div class="t">Toplam Aidat (Yazılan)</div><div class="v">${fmtTL(s.totalDues)}</div></div>
+      <div class="box"><div class="t">Toplanan</div><div class="v">${fmtTL(s.totalPaid)}</div></div>
+      <div class="box"><div class="t">Ödenmemiş</div><div class="v">${fmtTL(s.totalUnpaid)}</div></div>
+      <div class="box"><div class="t">Toplam Gider</div><div class="v">${fmtTL(s.totalExpenses)}</div></div>
+    `;
+  }catch(e){
+    toast("Veri alınamadı ❌", e.message);
+  }
+}
+load();
+</script>
+</body>
+</html>

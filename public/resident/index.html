@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sakin Paneli • Site Aidat Takip</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="nav"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="hd"><h2>Sakin Paneli 🏠</h2></div>
+        <div class="bd">
+          
+<div class="kpi" id="kpi"></div>
+
+<div class="card" style="margin-top:16px;">
+  <div class="hd"><h2 style="margin:0;">Borçlarım 🧾 (Kırmızı/Yeşil)</h2></div>
+  <div class="bd">
+    <table class="table" id="tbl">
+      <thead><tr><th>Dönem</th><th>Tutar</th><th>Durum</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="footer-note">Ödeme için üst menüden “Ödeme Yap” sayfasına geç 🙂</div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px;">
+  <div class="hd"><h2 style="margin:0;">Giderler (Şeffaflık) 👀</h2></div>
+  <div class="bd">
+    <table class="table" id="tblExp">
+      <thead><tr><th>Tarih</th><th>Başlık</th><th>Tutar</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px;">
+  <div class="hd"><h2 style="margin:0;">Duyurular 📣</h2></div>
+  <div class="bd" id="anns" style="color:var(--muted);"></div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<script type="module">
+import { requireAuth, api, fmtTL, qs } from "/assets/common.js";
+import { mountNav, toast } from "/assets/ui.js";
+requireAuth("resident");
+mountNav();
+
+async function load(){
+  try{
+    const dues = await api("/api/dues");
+    const total = dues.dues.reduce((s,d)=>s+Number(d.amount||0),0);
+    const unpaid = dues.dues.filter(d=>!d.paid).reduce((s,d)=>s+Number(d.amount||0),0);
+    const paid = total - unpaid;
+
+    qs("#kpi").innerHTML = `
+      <div class="box"><div class="t">Toplam Borç (Yazılan)</div><div class="v">${fmtTL(total)}</div></div>
+      <div class="box"><div class="t">Ödenmiş</div><div class="v">${fmtTL(paid)}</div></div>
+      <div class="box"><div class="t">Ödenmemiş (Bakiye)</div><div class="v">${fmtTL(unpaid)}</div></div>
+      <div class="box"><div class="t">Durum</div><div class="v">${unpaid>0 ? "Borç Var 🟥" : "Temiz 🟩"}</div></div>
+    `;
+
+    const tb = qs("#tbl tbody");
+    tb.innerHTML = dues.dues
+      .sort((a,b)=>b.period.localeCompare(a.period))
+      .map(d=>{
+        const st = d.paid ? `<span class="badge ok">Ödendi</span>` : `<span class="badge bad">Ödenmedi</span>`;
+        return `<tr><td>${d.period}</td><td>${fmtTL(d.amount)}</td><td>${st}</td></tr>`;
+      }).join("");
+
+    const exp = await api("/api/expenses");
+    qs("#tblExp tbody").innerHTML = exp.expenses
+      .sort((a,b)=>String(b.date).localeCompare(String(a.date)))
+      .map(e=>`<tr><td>${e.date}</td><td>${e.title}</td><td>${fmtTL(e.amount)}</td></tr>`).join("");
+
+    const ann = await api("/api/announcements");
+    qs("#anns").innerHTML = ann.announcements.length
+      ? ann.announcements.map(a=>`
+          <div style="border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px; background:rgba(0,0,0,.18);">
+            <div style="display:flex; justify-content:space-between; gap:10px;">
+              <b style="color:var(--text)">${a.title}</b>
+              <span class="badge">${a.date}</span>
+            </div>
+            <div style="margin-top:6px;">${a.body}</div>
+          </div>
+        `).join("")
+      : "Henüz duyuru yok.";
+  }catch(e){
+    toast("Veriler alınamadı ❌", e.message);
+  }
+}
+load();
+</script>
+</body>
+</html>

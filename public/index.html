@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Giriş • Site Aidat Takip</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="nav"></div>
+
+    <div class="grid">
+      <div class="card" style="grid-column: span 12;">
+        <div class="hd"><h2>Giriş Yap 🔐</h2><span class="badge warn">Prototip</span></div>
+        <div class="bd two-col">
+          <div>
+            <div class="row">
+              <div>
+                <label>Telefon</label>
+                <input id="phone" placeholder="0555..." />
+              </div>
+              <div>
+                <label>Şifre</label>
+                <input id="password" type="password" placeholder="••••••" />
+              </div>
+            </div>
+            <div class="row" style="margin-top:12px;">
+              <button id="btnLogin">Giriş</button>
+              <button id="btnFillAdmin" class="btn-ghost">Admin Doldur</button>
+              <button id="btnFillResident" class="btn-ghost">Sakin Doldur</button>
+            </div>
+            <div class="footer-note">
+              Demo hesaplar README'de 🎯
+            </div>
+          </div>
+
+          <div>
+            <div class="card" style="margin:0;">
+              <div class="hd"><h2>Ne var burada? 👀</h2></div>
+              <div class="bd">
+                <ul style="margin:0; padding-left:18px; color:var(--muted);">
+                  <li>Yönetici: daire & kullanıcı yönetimi</li>
+                  <li>Toplu aidat tanımlama (dönem + tutar)</li>
+                  <li>Sakin: bakiye görüntüleme + ödeme (banka doğrulama)</li>
+                  <li>Gider/duyuru görüntüleme</li>
+                  <li>Finansal rapor (toplanan, gider, net)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="hd"><h2>Boş/Hata Durumları ✅</h2></div>
+        <div class="bd" style="color:var(--muted);">
+          <div>• Telefon/şifre boşsa uyarı verir</div>
+          <div>• Hatalı şifre → giriş reddedilir</div>
+          <div>• Kart numarası hatalı (Luhn) → banka doğrulaması başarısız</div>
+          <div>• Ödeme tutarı borçla aynı değilse işlem durur</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { api, qs, setToken, setUser } from "/assets/common.js";
+    import { mountNav, toast } from "/assets/ui.js";
+
+    mountNav();
+
+    const phone = qs("#phone");
+    const password = qs("#password");
+
+    qs("#btnFillAdmin").addEventListener("click", ()=>{ phone.value="05550000000"; password.value="admin123"; });
+    qs("#btnFillResident").addEventListener("click", ()=>{ phone.value="05551112233"; password.value="123456"; });
+
+    qs("#btnLogin").addEventListener("click", async ()=>{
+      try{
+        const data = await api("/api/auth/login", {
+          method:"POST",
+          body: JSON.stringify({ phone: phone.value.trim(), password: password.value })
+        });
+        setToken(data.token);
+        setUser(data.user);
+
+        if (data.user.role === "admin") location.href = "/admin/index.html";
+        else location.href = "/resident/index.html";
+      }catch(e){
+        toast("Giriş başarısız ❌", e.message);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kullanıcılar • Site Aidat Takip</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body>
+  <div class="container">
+    <div id="nav"></div>
+    <div class="grid">
+      <div class="card">
+        <div class="hd"><h2>Kullanıcı Yönetimi 👥</h2></div>
+        <div class="bd">
+          
+<div class="two-col">
+  <div>
+    <h3 style="margin-top:0;">Yeni Kullanıcı Ekle ➕</h3>
+    <div class="row">
+      <div><label>Ad Soyad</label><input id="name" /></div>
+      <div><label>Telefon</label><input id="phone" placeholder="0555..." /></div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <div><label>Rol</label>
+        <select id="role">
+          <option value="resident">Sakin</option>
+          <option value="admin">Yönetici</option>
+        </select>
+      </div>
+      <div><label>Şifre</label><input id="password" type="password" /></div>
+    </div>
+    <div class="row" style="margin-top:12px;">
+      <button id="btnAdd">Kaydet</button>
+    </div>
+    <div class="footer-note">Not: Telefona göre benzersiz kontrol var. (Hata durumunu görmen için 🙂)</div>
+  </div>
+  <div>
+    <h3 style="margin-top:0;">Kullanıcı Listesi 📋</h3>
+    <table class="table" id="tbl">
+      <thead><tr><th>ID</th><th>Ad</th><th>Telefon</th><th>Rol</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<script type="module">
+import { requireAuth, api, qs } from "/assets/common.js";
+import { mountNav, toast } from "/assets/ui.js";
+requireAuth("admin");
+mountNav();
+
+async function refresh(){
+  const data = await api("/api/users");
+  const tb = qs("#tbl tbody");
+  tb.innerHTML = data.users.map(u=>`
+    <tr>
+      <td>${u.id}</td>
+      <td>${u.name}</td>
+      <td>${u.phone}</td>
+      <td>${u.role === "admin" ? "Yönetici" : "Sakin"}</td>
+      <td><button class="btn-danger" data-del="${u.id}">Sil</button></td>
+    </tr>
+  `).join("");
+
+  tb.querySelectorAll("[data-del]").forEach(btn=>{
+    btn.addEventListener("click", async ()=>{
+      const id = btn.getAttribute("data-del");
+      if (!confirm("Silinsin mi?")) return;
+      try{
+        await api("/api/users/"+id, { method:"DELETE" });
+        toast("Silindi 🗑️");
+        refresh();
+      }catch(e){ toast("Silinemedi ❌", e.message); }
+    });
+  });
+}
+
+qs("#btnAdd").addEventListener("click", async ()=>{
+  try{
+    await api("/api/users", {
+      method:"POST",
+      body: JSON.stringify({
+        name: qs("#name").value.trim(),
+        phone: qs("#phone").value.trim(),
+        role: qs("#role").value,
+        password: qs("#password").value
+      })
+    });
+    toast("Kullanıcı eklendi ✅");
+    qs("#name").value=""; qs("#phone").value=""; qs("#password").value="";
+    refresh();
+  }catch(e){
+    toast("Eklenemedi ❌", e.message);
+  }
+});
+
+refresh();
+</script>
+</body>
+</html>
